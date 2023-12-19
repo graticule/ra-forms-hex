@@ -3,7 +3,7 @@ import HexForm from './components/HexForm';
 
 function App() {
   return (
-      <HexForm/>
+      <HexForm></HexForm>
   )
 }
 

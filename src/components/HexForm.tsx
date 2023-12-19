@@ -4,29 +4,38 @@ import RGBOutput from "./RGBOutput";
 
 interface State {
   value: string,
-  rgb?: number[]
+  result: string,
+  color: string
 }
 
 export default function HexForm() {
-  const [state, setState] = useState({value: "", rgb: undefined});
+  const [state, setState] = useState({ value: "", result: "", color: "#ffffff" });
 
   const handleInput = (e) => {
     e.preventDefault();
-    setState({ ...state, value: e.target.value });
-    if(state.value.length == 7 && RegExp("^#[A-Fa-f0-9]{6}$").test(state.value)) {
-      const hex = state.value.slice(1);
-      const r = parseInt(hex.slice(0, 2), 16);
-      const g = parseInt(hex.slice(2, 4), 16);
-      const b = parseInt(hex.slice(4, 6), 16);
-      setState({ ...state, rgb: [r, g, b] });
+    const value = e.target.value;
+    setState((state: State) => ({ ...state, value }));
+    if (value.length < 7) {
+      setState((state: State) => ({ ...state, result: "" }));
+      return;
+    }
+    if (value.length == 7 && RegExp("^#[0-9A-Fa-f]{6}$", "i").test(value)) {
+      const r = parseInt(value.slice(1, 3), 16);
+      const g = parseInt(value.slice(3, 5), 16);
+      const b = parseInt(value.slice(5), 16);
+      setState((state: State) => ({ ...state, result: `rgb(${r}, ${g}, ${b})`, color: value }));
+    } else {
+      setState((state: State) => ({ ...state, result: "Ошибка!" }));
     }
   }
   return (
-    <div className="background">
-    <form action="" className="form" onSubmit={handleInput}>
-      <HexInput value={state.value} onChange={handleInput}/>
-      <RGBOutput rgb={state.rgb}/>
-    </form>
-    </div>
+    <>
+      <div className="background" style={{ backgroundColor: state.color }}>
+        <div className="form">
+          <HexInput value={state.value} onChange={handleInput} />
+          <RGBOutput result={state.result} style={{ backgroundColor: state.color }} />
+        </div>
+      </div>
+    </>
   )
 }

@@ -1,8 +1,8 @@
 interface Props {
-  rgb: number[] | undefined,
+  result: string,
 }
-export default function RGBOutput({ rgb }:Props) {
+export default function RGBOutput({ result }:Props) {
   return (
-    <div className="output">{rgb ? `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})` : ""}</div>
+    <div className="output"><p className="output-text">{result}</p></div>
   )
 }
